@@ -8,10 +8,20 @@ const app = express();
 //
 app.use(express.json()); 
 app.use(express.urlencoded()); //Parse URL-encoded bodies
+app.use("/public", express.static(path.join(__dirname, "public")));
 var db = {};
 app.get('/', function(req, res) {
-    res.send('hello world');
+    res.sendFile("index.html", { root: path.join(__dirname, "/public") });
+    // res.sendFile('./public/index.html');
 });
+app.get("/notes", function(req, res) {
+    res.sendFile("notes.html", { root: path.join(__dirname, "/public") });
+    // res.sendFile('./public/index.html');
+});
+
+
+
+
 app.post("/", function(req, res) {
     console.log(req.body)
     res.send("hello world");
@@ -21,18 +31,18 @@ app.post("/", function(req, res) {
 
 app.get("/getdata", function(req, res) {
 
-    const rawdata = fs.readFileSync("data.json");
+    const rawdata = fs.readFileSync("./db/db.json");
     const data = JSON.parse(rawdata);
     console.log(data);
     console.log(rawdata);
     res.json(data);
 });
 app.post("/adddata", function(req, res) {
-    const rawdata = fs.readFileSync("data.json"); //call our data
+    const rawdata = fs.readFileSync("./db/db.json"); //call our data
     const data = JSON.parse(rawdata); //parse it into something we can use
     newData = {...data, ...req.body }; //combination of the old data and the new information gieven through the post request
     const jsonString = JSON.stringify(newData); //turn it back into a json string  in order to save it
-    fs.writeFileSync("data.json", jsonString); //saving it
+    fs.writeFileSync("./db/db.json", jsonString); //saving it
 
     console.log(newData);
     res.json(newData);
@@ -62,5 +72,5 @@ app.post("/adddata", function(req, res) {
 
 
 
-app.listen(8080);
-app.listen(8080);
+
+app.listen(8888);
