@@ -4,6 +4,8 @@ const path = require("path");
 const fs = require("fs");
 const app = express();
 
+const PORT = process.env.PORT || 8888
+
 //middleware
 app.use(express.json());
 
@@ -74,4 +76,4 @@ app.delete("/api/notes/:id", (req, res) => {
 
 //deploy application onto heroku
 
-app.listen(8888);
+app.listen(PORT);
