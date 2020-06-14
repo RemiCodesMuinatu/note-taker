@@ -1,16 +1,20 @@
-//Rest-CRUD API
-const express = require('express');
-const path = require('path');
-const fs = require('fs');
+//Imports of Libraries
+const express = require("express");
+const path = require("path");
+const fs = require("fs");
 const app = express();
-//create server.js
-//input middleware function to parse json data for every request and response
-//
-app.use(express.json()); 
+
+//middleware
+app.use(express.json());
+
 app.use(express.urlencoded()); //Parse URL-encoded bodies
 app.use("/public", express.static(path.join(__dirname, "public")));
+
+//making data object in order for the server to have data to use for requests
 var db = {};
-app.get('/', function(req, res) {
+
+//Routes
+app.get("/", function(req, res) {
     res.sendFile("index.html", { root: path.join(__dirname, "/public") });
     // res.sendFile('./public/index.html');
 });
@@ -19,40 +23,27 @@ app.get("/notes", function(req, res) {
     // res.sendFile('./public/index.html');
 });
 
-
-
-
-app.post("/", function(req, res) {
-    console.log(req.body)
-    res.send("hello world");
-});
-
-
-
-app.get("/getdata", function(req, res) {
-
+//Route for getting notes
+app.get("/api/notes", function(req, res) {
     const rawdata = fs.readFileSync("./db/db.json");
     const data = JSON.parse(rawdata);
     console.log(data);
     console.log(rawdata);
-    res.json(data);
+    res.json(data.data);
 });
-app.post("/adddata", function(req, res) {
+
+//Route to save notes of data
+app.post("/api/notes", function(req, res) {
+    console.log(req.body);
     const rawdata = fs.readFileSync("./db/db.json"); //call our data
-    const data = JSON.parse(rawdata); //parse it into something we can use
-    newData = {...data, ...req.body }; //combination of the old data and the new information gieven through the post request
-    const jsonString = JSON.stringify(newData); //turn it back into a json string  in order to save it
-    fs.writeFileSync("./db/db.json", jsonString); //saving it
+    var data = JSON.parse(rawdata); //parse it into something we can use
+    //var newData = //combination of the old data and the new information gieven through the post request
+    // const jsonString = JSON.stringify(newData); //turn it back into a json string  in order to save it
+    // fs.writeFileSync("./db/db.json", jsonString); //saving it
 
-    console.log(newData);
-    res.json(newData);
+    // console.log(newData);
+    // res.json(newData);
 });
-
-
-
-
-
-
 
 //JAVASCRIPT Function for Note Taker
 //create an eventListener for the Get Started Button that creates a placeholder to write the notes so that it can be displayed on the screen
@@ -68,9 +59,5 @@ app.post("/adddata", function(req, res) {
 //function to delete notes
 
 //deploy application onto heroku
-
-
-
-
 
 app.listen(8888);

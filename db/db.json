@@ -1,1 +1,6 @@
-{"0":{"title":"Test Title","text":"Test text"},"name":"Zintis","sign":"Scorpio"}
+{
+    "data": [{
+        "title": "Test Title",
+        "text": "Test text"
+    }]
+}
