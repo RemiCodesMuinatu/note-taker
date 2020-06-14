@@ -34,15 +34,29 @@ app.get("/api/notes", function(req, res) {
 
 //Route to save notes of data
 app.post("/api/notes", function(req, res) {
-    console.log(req.body);
     const rawdata = fs.readFileSync("./db/db.json"); //call our data
     var data = JSON.parse(rawdata); //parse it into something we can use
+    console.log(data);
+    req.body.id = data.data.length
+    data.data.push(req.body);
     //var newData = //combination of the old data and the new information gieven through the post request
-    // const jsonString = JSON.stringify(newData); //turn it back into a json string  in order to save it
-    // fs.writeFileSync("./db/db.json", jsonString); //saving it
+    const jsonString = JSON.stringify(data); //turn it back into a json string  in order to save it
+    fs.writeFileSync("./db/db.json", jsonString); //saving it
 
-    // console.log(newData);
-    // res.json(newData);
+    console.log(data);
+    res.json(data.data);
+});
+
+app.delete("/api/notes/:id", (req, res) => {
+    console.log(req.params.id);
+
+    const rawdata = fs.readFileSync("./db/db.json"); //call our data
+    var data = JSON.parse(rawdata); //parse it into something we can use
+    data.data.splice(req.params.id, 1)
+    console.log(data.data)
+    const jsonString = JSON.stringify(data); //turn it back into a json string  in order to save it
+    fs.writeFileSync("./db/db.json", jsonString); //saving it
+    res.json(data.data);
 });
 
 //JAVASCRIPT Function for Note Taker
